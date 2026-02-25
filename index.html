@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-　　<meta name="robots" content="noindex"> 
+    <meta name="robots" content="noindex"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Googleスライド設計クリエイター</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="text-sm font-medium text-blue-400" id="phase-indicator">
-                要件定義
+                スライドの基本設定
             </div>
         </div>
     </header>
@@ -107,7 +107,7 @@
             <!-- Step 1: 設定 -->
             <div id="step-0" class="flex flex-col items-center bg-gray-800 px-4 rounded-full z-10">
                 <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-active transition-colors shadow-lg">1</div>
-                <span class="text-xs mt-2 font-bold text-blue-400">要件定義</span>
+                <span class="text-xs mt-2 font-bold text-blue-400">基本設定</span>
             </div>
             
             <!-- Step 2: 出力 -->
@@ -120,19 +120,22 @@
         <!-- PHASE 0: Input Form -->
         <section id="phase-0" class="bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 animate-fade-in border border-gray-700">
             <h2 class="text-2xl font-bold text-gray-100 mb-6 border-b border-gray-700 pb-4 flex items-center">
-                <i class="fas fa-sliders-h text-blue-500 mr-3"></i>スライド要件の定義
+                <i class="fas fa-sliders-h text-blue-500 mr-3"></i>作りたいスライドを教えてください
             </h2>
             
             <!-- 1. Theme -->
             <div class="mb-10">
-                <label class="block text-sm font-bold text-gray-300 mb-2">① テーマ (Theme)</label>
-                <input type="text" id="input-theme" placeholder="例：修学旅行の説明、光合成の仕組み、進路選択について" 
-                    class="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-lg shadow-inner">
+                <div class="flex items-baseline gap-2 mb-2">
+                    <label class="block text-sm font-bold text-gray-300">① テーマ</label>
+                    <span class="text-xs text-gray-400">※ざっくりした内容でも細かいスライド構成を入れてもOK</span>
+                </div>
+                <textarea id="input-theme" placeholder="例１：修学旅行の説明、光合成の仕組み、進路選択について&#10;例２：スライド１：タイトル・・・　～　　スライド１０：まとめ" 
+                    class="w-full p-4 h-32 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-lg shadow-inner resize-y"></textarea>
             </div>
 
             <!-- 2. Target Audience -->
             <div class="mb-10">
-                <label class="block text-sm font-bold text-gray-300 mb-4">② 対象 (Target)</label>
+                <label class="block text-sm font-bold text-gray-300 mb-4">② 対象</label>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <button onclick="selectTarget('elementary')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="elementary">
                         <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">🎒</span>
@@ -163,14 +166,14 @@
 
             <!-- 3. Design Selection (Hidden until Target is selected) -->
             <div id="design-section" class="mb-10 hidden animate-fade-in">
-                <label class="block text-sm font-bold text-gray-300 mb-4">③ デザイン (Design) - 12種類から選択</label>
+                <label class="block text-sm font-bold text-gray-300 mb-4">③ デザイン - 12種類から選択</label>
                 <div id="design-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     <!-- Javascript will populate this -->
                 </div>
                 
                 <!-- 4. Option (UD Font) -->
                 <div class="pt-6 border-t border-gray-700">
-                    <label class="block text-sm font-bold text-gray-300 mb-4">④ オプション (Option)</label>
+                    <label class="block text-sm font-bold text-gray-300 mb-4">④ オプション</label>
                     <label class="flex items-center gap-4 p-4 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer hover:bg-gray-600 transition group">
                         <!-- Checked by default -->
                         <input type="checkbox" id="input-udfont" class="w-6 h-6 text-blue-600 rounded bg-gray-800 border-gray-500 focus:ring-blue-500 focus:ring-offset-gray-800" checked>
@@ -500,7 +503,7 @@
         function backToPhase0() {
             els.phase2.classList.add('hidden');
             els.phase0.classList.remove('hidden');
-            els.phaseIndicator.textContent = "要件定義";
+            els.phaseIndicator.textContent = "スライドの基本設定";
             updateStepper(false);
         }
 
