@@ -232,132 +232,132 @@
                 </div>
 
                 <div class="mt-10 text-center">
-                    <button onclick="location.reload()" class="px-8 py-3 text-blue-400 font-bold hover:bg-blue-900/30 hover:text-blue-300 rounded-lg transition border border-transparent hover:border-blue-900">
-                        <i class="fas fa-redo mr-2"></i>新しいテーマで作成する
-                    </button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-gray-800 border-t border-gray-700 mt-auto py-8">
-        <div class="max-w-5xl mx-auto px-4 text-center text-gray-500 text-xs">
-            <p class="mb-2 font-bold text-gray-400">EduSlide Architect</p>
-            <p>&copy; 2025 Education Slide Architect / Based on GEM Custom Instructions</p>
+            <button onclick="location.reload()" class="px-8 py-3 text-blue-400 font-bold hover:bg-blue-900/30 hover:text-blue-300 rounded-lg transition border border-transparent hover:border-blue-900">
+                <i class="fas fa-redo mr-2"></i>新しいテーマで作成する
+            </button>
         </div>
-    </footer>
+    </div>
+</section>
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        // --- Data Definitions (Target x Design Matrix: Expanded to 12) ---
-        const designMatrix = {
-            elementary: {
-                name: "小学部向け (Elementary)",
-                patterns: [
-                    { id: "A", name: "【元気・ポップ】", colors: ["#FDD835", "#FB8C00", "#039BE5"], desc: "楽しい・ゲーム感覚" },
-                    { id: "B", name: "【やさしい・絵本】", colors: ["#F8BBD0", "#B2EBF2", "#FFF9C4"], desc: "安心・物語調" },
-                    { id: "C", name: "【探求・冒険】", colors: ["#66BB6A", "#8D6E63", "#FFCA28"], desc: "冒険・発見" },
-                    { id: "D", name: "【海・オーシャン】", colors: ["#0288D1", "#4FC3F7", "#E1F5FE"], desc: "爽やか・広大" },
-                    { id: "E", name: "【森・フォレスト】", colors: ["#33691E", "#8BC34A", "#DCEDC8"], desc: "自然・リラックス" },
-                    { id: "F", name: "【太陽・サンシャイン】", colors: ["#F57F17", "#FFEB3B", "#FFF9C4"], desc: "明るい・元気" },
-                    { id: "G", name: "【宇宙・コスモ】", colors: ["#311B92", "#673AB7", "#FFEB3B"], desc: "神秘・科学" },
-                    { id: "H", name: "【キャンディ・スイート】", colors: ["#EC407A", "#AB47BC", "#F8BBD0"], desc: "可愛い・夢" },
-                    { id: "I", name: "【スポーツ・アクティブ】", colors: ["#D32F2F", "#FFFFFF", "#212121"], desc: "情熱・運動" },
-                    { id: "J", name: "【動物・アニマル】", colors: ["#795548", "#A1887F", "#D7CCC8"], desc: "温もり・生命" },
-                    { id: "K", name: "【虹・レインボー】", colors: ["#FF5722", "#FFC107", "#00BCD4"], desc: "多様性・希望" },
-                    { id: "L", name: "【スケッチ・手描き】", colors: ["#FFFFFF", "#212121", "#BDBDBD"], desc: "自由・創造" }
-                ]
-            },
-            middle: {
-                name: "中学部向け (Middle School)",
-                patterns: [
-                    { id: "A", name: "【学校・黒板】", colors: ["#263238", "#FFFFFF", "#FFF176"], desc: "学習・集中" },
-                    { id: "B", name: "【部活・スポーツ】", colors: ["#1565C0", "#FF6F00", "#EEEEEE"], desc: "爽やか・団結" },
-                    { id: "C", name: "【整理・ノート】", colors: ["#ECEFF1", "#283593", "#546E7A"], desc: "整理整頓" },
-                    { id: "D", name: "【テック・ダーク】", colors: ["#000000", "#00E676", "#212121"], desc: "技術・かっこいい" },
-                    { id: "E", name: "【ポップ・アート】", colors: ["#D500F9", "#00E5FF", "#FFEA00"], desc: "個性的・美術" },
-                    { id: "F", name: "【ヴィンテージ】", colors: ["#5D4037", "#D7CCC8", "#FFECB3"], desc: "歴史・伝統" },
-                    { id: "G", name: "【幾何学・ジオメトリ】", colors: ["#37474F", "#90A4AE", "#CFD8DC"], desc: "数学・論理" },
-                    { id: "H", name: "【エコ・ネイチャー】", colors: ["#1B5E20", "#FFFFFF", "#81C784"], desc: "環境・清潔" },
-                    { id: "I", name: "【コスモス・夜空】", colors: ["#1A237E", "#000000", "#E040FB"], desc: "深遠・思考" },
-                    { id: "J", name: "【アーバン・シティ】", colors: ["#424242", "#FFC107", "#EEEEEE"], desc: "都会的・社会" },
-                    { id: "K", name: "【モノクロ・シンプル】", colors: ["#212121", "#FFFFFF", "#9E9E9E"], desc: "硬派・真剣" },
-                    { id: "L", name: "【夕焼け・サンセット】", colors: ["#BF360C", "#FF5722", "#4527A0"], desc: "情動・変化" }
-                ]
-            },
-            high: {
-                name: "高等部向け (High School)",
-                patterns: [
-                    { id: "A", name: "【進路・アカデミック】", colors: ["#1A237E", "#B71C1C", "#F5F5F5"], desc: "真面目・講義" },
-                    { id: "B", name: "【トレンド・モダン】", colors: ["#212121", "#00E676", "#FFFFFF"], desc: "都会的・最先端" },
-                    { id: "C", name: "【シンプル・ミニマル】", colors: ["#FAFAFA", "#424242", "#00ACC1"], desc: "本質的・大人" },
-                    { id: "D", name: "【スタートアップ】", colors: ["#0277BD", "#FFFFFF", "#B0BEC5"], desc: "ビジネス・革新" },
-                    { id: "E", name: "【モダニズム】", colors: ["#B71C1C", "#212121", "#FFFFFF"], desc: "鋭利・芸術" },
-                    { id: "F", name: "【ネイチャーテック】", colors: ["#33691E", "#CFD8DC", "#FFFFFF"], desc: "調和・未来" },
-                    { id: "G", name: "【ラグジュアリー】", colors: ["#000000", "#FFD700", "#424242"], desc: "高級・特別" },
-                    { id: "H", name: "【エディトリアル】", colors: ["#3E2723", "#EFEBE9", "#8D6E63"], desc: "文学・記事" },
-                    { id: "I", name: "【サイバー・ネオン】", colors: ["#0D47A1", "#F50057", "#00E5FF"], desc: "情報・電脳" },
-                    { id: "J", name: "【クラシック】", colors: ["#0D47A1", "#FFF8E1", "#FF6F00"], desc: "伝統・格式" },
-                    { id: "K", name: "【ラボ・研究所】", colors: ["#FFFFFF", "#0288D1", "#E1F5FE"], desc: "清潔・理系" },
-                    { id: "L", name: "【アーキテクチャ】", colors: ["#546E7A", "#B0BEC5", "#ECEFF1"], desc: "構造・工学" }
-                ]
-            },
-            teachers: {
-                name: "教員向け (For Teachers)",
-                patterns: [
-                    { id: "A", name: "【公式・標準】", colors: ["#37474F", "#0277BD", "#FFFFFF"], desc: "信頼・公式" },
-                    { id: "B", name: "【研修・コラボ】", colors: ["#FF7043", "#81C784", "#FFF3E0"], desc: "参加・交流" },
-                    { id: "C", name: "【配布・プリント】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "実務・節約" },
-                    { id: "D", name: "【トラスト・ブルー】", colors: ["#1565C0", "#90CAF9", "#E3F2FD"], desc: "誠実・冷静" },
-                    { id: "E", name: "【ウォーム・オレンジ】", colors: ["#E65100", "#FFE0B2", "#FFF3E0"], desc: "温かさ・支援" },
-                    { id: "F", name: "【フレッシュ・ミント】", colors: ["#2E7D32", "#A5D6A7", "#E8F5E9"], desc: "成長・新人" },
-                    { id: "G", name: "【分析・アナリシス】", colors: ["#000066", "#CC0000", "#EEEEEE"], desc: "データ・重要" },
-                    { id: "H", name: "【ワークショップ】", colors: ["#FFD600", "#00BCD4", "#F5F5F5"], desc: "アイデア・付箋" },
-                    { id: "I", name: "【トラディショナル】", colors: ["#4E342E", "#D7CCC8", "#FFFFFF"], desc: "伝統・重厚" },
-                    { id: "J", name: "【カーム・ティール】", colors: ["#00695C", "#B2DFDB", "#FFFFFF"], desc: "落ち着き・集中" },
-                    { id: "K", name: "【フォーカス】", colors: ["#212121", "#FFFFFF", "#FF5252"], desc: "要点・強調" },
-                    { id: "L", name: "【クリエイティブ】", colors: ["#6A1B9A", "#FFEB3B", "#F3E5F5"], desc: "創造・提案" }
-                ]
-            },
-            parents: {
-                name: "保護者向け (For Parents)",
-                patterns: [
-                    { id: "A", name: "【誠実・信頼】", colors: ["#0D47A1", "#D4AF37", "#E3F2FD"], desc: "誠実・礼儀" },
-                    { id: "B", name: "【温もり・安心】", colors: ["#8D6E63", "#C5E1A5", "#FFF8E1"], desc: "温かい・歓迎" },
-                    { id: "C", name: "【成長・未来】", colors: ["#4CAF50", "#FFFFFF", "#81D4FA"], desc: "成長・爽やか" },
-                    { id: "D", name: "【エレガント】", colors: ["#7E57C2", "#EDE7F6", "#FFFFFF"], desc: "上品・丁寧" },
-                    { id: "E", name: "【コミュニティ】", colors: ["#FF9800", "#8BC34A", "#FFF3E0"], desc: "地域・協力" },
-                    { id: "F", name: "【セーフティ】", colors: ["#1976D2", "#FFC107", "#E3F2FD"], desc: "安全・注意" },
-                    { id: "G", name: "【伝統・和風】", colors: ["#880E4F", "#C5E1A5", "#FCE4EC"], desc: "行事・祝賀" },
-                    { id: "H", name: "【スプリング】", colors: ["#F06292", "#AED581", "#FFFDE7"], desc: "春・始まり" },
-                    { id: "I", name: "【オータム】", colors: ["#E64A19", "#FFB74D", "#5D4037"], desc: "秋・実り" },
-                    { id: "J", name: "【スカイ・空】", colors: ["#039BE5", "#B3E5FC", "#FFFFFF"], desc: "広い心・展望" },
-                    { id: "K", name: "【アース・大地】", colors: ["#5D4037", "#8BC34A", "#EFEBE9"], desc: "堅実・基盤" },
-                    { id: "L", name: "【ハーモニー】", colors: ["#BA68C8", "#4DD0E1", "#F8BBD0"], desc: "調和・多様" }
-                ]
-            },
-            universal: {
-                name: "ユニバーサル (Universal)",
-                patterns: [
-                    { id: "A", name: "【白背景ハイコン】", colors: ["#FFFFFF", "#000000", "#005AFF"], desc: "最大視認性" },
-                    { id: "B", name: "【黒背景ハイコン】", colors: ["#000000", "#FFFFFF", "#FFD600"], desc: "目への負担減" },
-                    { id: "C", name: "【UDスタンダード】", colors: ["#FFFFFF", "#333333", "#FF5722"], desc: "色覚バリアフリー" },
-                    { id: "D", name: "【CUD推奨・青黄】", colors: ["#005AFF", "#FFD600", "#FFFFFF"], desc: "CUD推奨配色" },
-                    { id: "E", name: "【グレースケール】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "色情報なし" },
-                    { id: "F", name: "【セピア・読書】", colors: ["#F4ECD8", "#5D4037", "#8D6E63"], desc: "低ブルーライト" },
-                    { id: "G", name: "【ダークブルー】", colors: ["#0D47A1", "#E3F2FD", "#90CAF9"], desc: "落ち着き" },
-                    { id: "H", name: "【クリーム】", colors: ["#FFF9C4", "#212121", "#3E2723"], desc: "低グレア" },
-                    { id: "I", name: "【HCイエロー】", colors: ["#000000", "#FFFF00", "#FFFFFF"], desc: "超高コントラスト" },
-                    { id: "J", name: "【HCシアン】", colors: ["#000000", "#00FFFF", "#FFFFFF"], desc: "超高コントラスト" },
-                    { id: "K", name: "【ソフトダーク】", colors: ["#303030", "#E0E0E0", "#B0BEC5"], desc: "柔らかい黒" },
-                    { id: "L", name: "【フォーカスライト】", colors: ["#FAFAFA", "#1A237E", "#283593"], desc: "文字中心" }
-                ]
-            }
-        };
+</main>
 
-        // --- State Management ---
-        let state = {
+<footer class="bg-gray-800 border-t border-gray-700 mt-auto py-8">
+<div class="max-w-5xl mx-auto px-4 text-center text-gray-500 text-xs">
+    <p class="mb-2 font-bold text-gray-400">EduSlide Architect</p>
+    <p>&copy; 2025 Education Slide Architect / Based on GEM Custom Instructions</p>
+</div>
+</footer>
+
+<!-- JavaScript Application Logic -->
+<script>
+// --- Data Definitions (Target x Design Matrix: Expanded to 12 - High Visibility Version) ---
+const designMatrix = {
+    elementary: {
+        name: "小学部向け (Elementary)",
+        patterns: [
+            { id: "A", name: "【元気・ポップ】", colors: ["#FFFFFF", "#0277BD", "#E65100"], desc: "白背景に濃い青とオレンジ" },
+            { id: "B", name: "【青空・太陽】", colors: ["#E1F5FE", "#01579B", "#D32F2F"], desc: "淡青背景にくっきり赤青" },
+            { id: "C", name: "【森の探検】", colors: ["#F1F8E9", "#1B5E20", "#4E342E"], desc: "淡緑背景に濃緑と濃茶" },
+            { id: "D", name: "【くっきり・絵本】", colors: ["#FFFFFF", "#212121", "#D50000"], desc: "白背景に黒文字と鮮烈な赤" },
+            { id: "E", name: "【星空・宇宙】", colors: ["#1A237E", "#FFFFFF", "#FFD600"], desc: "濃紺背景に白文字と黄色" },
+            { id: "F", name: "【ストロベリー】", colors: ["#FFFFFF", "#C2185B", "#1B5E20"], desc: "白背景に濃ピンクと濃緑" },
+            { id: "G", name: "【海・マリン】", colors: ["#FFFFFF", "#0D47A1", "#0288D1"], desc: "白背景に2種の濃い青" },
+            { id: "H", name: "【ヒマワリ】", colors: ["#FFFDE7", "#212121", "#F57F17"], desc: "淡黄背景に黒と濃いオレンジ" },
+            { id: "I", name: "【アクティブ】", colors: ["#FFFFFF", "#212121", "#E65100"], desc: "白背景に黒と目立つオレンジ" },
+            { id: "J", name: "【サファリ】", colors: ["#EFEBE9", "#3E2723", "#1B5E20"], desc: "淡茶背景に濃茶と濃緑" },
+            { id: "K", name: "【レインボー】", colors: ["#FFFFFF", "#0D47A1", "#B71C1C"], desc: "白背景に濃い青と濃い赤" },
+            { id: "L", name: "【黒板・チョーク】", colors: ["#263238", "#FFFFFF", "#FFEB3B"], desc: "黒板色に白と黄色の文字" }
+        ]
+    },
+    middle: {
+        name: "中学部向け (Middle School)",
+        patterns: [
+            { id: "A", name: "【学校・黒板】", colors: ["#1B5E20", "#FFFFFF", "#FFEB3B"], desc: "緑の黒板に白と黄色の文字" },
+            { id: "B", name: "【スマートノート】", colors: ["#FFFFFF", "#1A237E", "#D32F2F"], desc: "白背景に濃紺と濃赤" },
+            { id: "C", name: "【部活・エナジー】", colors: ["#FFFFFF", "#E65100", "#212121"], desc: "白背景に濃オレンジと黒" },
+            { id: "D", name: "【テック・ダーク】", colors: ["#212121", "#FFFFFF", "#00E676"], desc: "黒背景に白とネオングリーン" },
+            { id: "E", name: "【クリア・ブルー】", colors: ["#E3F2FD", "#0D47A1", "#1565C0"], desc: "淡青背景に高コントラスト青" },
+            { id: "F", name: "【モノクロシャープ】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "白黒灰で視認性最大" },
+            { id: "G", name: "【サイエンス】", colors: ["#FFFFFF", "#006064", "#00BCD4"], desc: "白背景に濃い青緑" },
+            { id: "H", name: "【ヒストリー】", colors: ["#FFF8E1", "#3E2723", "#5D4037"], desc: "淡黄背景に濃い茶色" },
+            { id: "I", name: "【ネイビーイエロー】", colors: ["#0D47A1", "#FFFFFF", "#FFD600"], desc: "濃紺背景に白と黄色" },
+            { id: "J", name: "【アーバン・シティ】", colors: ["#ECEFF1", "#263238", "#455A64"], desc: "薄灰背景に濃灰文字" },
+            { id: "K", name: "【フレッシュ緑】", colors: ["#FFFFFF", "#1B5E20", "#4CAF50"], desc: "白背景に濃緑と鮮やかな緑" },
+            { id: "L", name: "【ディープパープル】", colors: ["#311B92", "#FFFFFF", "#EA80FC"], desc: "濃紫背景に白と明るい紫" }
+        ]
+    },
+    high: {
+        name: "高等部向け (High School)",
+        patterns: [
+            { id: "A", name: "【アカデミック】", colors: ["#FFFFFF", "#0D47A1", "#1A237E"], desc: "白背景に濃い青と紺" },
+            { id: "B", name: "【クラシック黒】", colors: ["#FFFFFF", "#212121", "#000000"], desc: "白背景に真っ黒な文字" },
+            { id: "C", name: "【モダン・ダーク】", colors: ["#121212", "#FFFFFF", "#90CAF9"], desc: "漆黒に白文字と淡い青" },
+            { id: "D", name: "【クリムゾン赤】", colors: ["#FFFFFF", "#B71C1C", "#212121"], desc: "白背景にえんじ色と黒" },
+            { id: "E", name: "【ミニマル・白】", colors: ["#FAFAFA", "#424242", "#1976D2"], desc: "真っ白な背景に濃灰と青" },
+            { id: "F", name: "【エコ・グリーン】", colors: ["#FFFFFF", "#004D40", "#00695C"], desc: "白背景に濃い青緑" },
+            { id: "G", name: "【フューチャー】", colors: ["#000000", "#FFFFFF", "#00B0FF"], desc: "黒背景に白と明るいシアン" },
+            { id: "H", name: "【トラディショナル】", colors: ["#FFFFFF", "#3E2723", "#5D4037"], desc: "白背景に濃い茶色" },
+            { id: "I", name: "【アナリティクス】", colors: ["#FFFFFF", "#311B92", "#6200EA"], desc: "白背景に濃い紫と青紫" },
+            { id: "J", name: "【ハイコン黄黒】", colors: ["#000000", "#FFD600", "#FFFFFF"], desc: "黒背景に黄色と白の文字" },
+            { id: "K", name: "【エレガント紺】", colors: ["#F5F5F5", "#1A237E", "#B71C1C"], desc: "淡灰に濃紺とえんじ色" },
+            { id: "L", name: "【グローバル】", colors: ["#FFFFFF", "#01579B", "#33691E"], desc: "白背景に濃い青と濃い緑" }
+        ]
+    },
+    teachers: {
+        name: "教員向け (For Teachers)",
+        patterns: [
+            { id: "A", name: "【スタンダード】", colors: ["#FFFFFF", "#212121", "#0277BD"], desc: "白背景に黒と公式な青" },
+            { id: "B", name: "【プリント用白黒】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "白黒印刷に最適な高コントラスト" },
+            { id: "C", name: "【トラスト・紺】", colors: ["#FFFFFF", "#0D47A1", "#1565C0"], desc: "白背景に信頼感のある濃紺" },
+            { id: "D", name: "【ワークショップ】", colors: ["#FFFFFF", "#E65100", "#212121"], desc: "白背景に目立つオレンジと黒" },
+            { id: "E", name: "【研修グリーン】", colors: ["#FFFFFF", "#1B5E20", "#2E7D32"], desc: "白背景に落ち着いた濃緑" },
+            { id: "F", name: "【フォーカス暗】", colors: ["#263238", "#FFFFFF", "#4FC3F7"], desc: "濃灰背景に白と水色" },
+            { id: "G", name: "【ロジカルブルー】", colors: ["#F3F6F9", "#003366", "#CC0000"], desc: "ごく淡い青に濃紺と濃赤" },
+            { id: "H", name: "【温もりブラウン】", colors: ["#FFFFFF", "#4E342E", "#3E2723"], desc: "白背景に落ち着いた濃茶" },
+            { id: "I", name: "【クリアホワイト】", colors: ["#FFFFFF", "#333333", "#005AFF"], desc: "白背景に濃灰と鮮明な青" },
+            { id: "J", name: "【データレポート】", colors: ["#FFFFFF", "#4A148C", "#212121"], desc: "白背景に濃紫と黒" },
+            { id: "K", name: "【シンプルセピア】", colors: ["#FEFBEA", "#212121", "#5D4037"], desc: "淡アイボリーに黒と濃茶" },
+            { id: "L", name: "【ハイコン黄色】", colors: ["#212121", "#FFFFFF", "#FFD600"], desc: "濃灰背景に白と黄色" }
+        ]
+    },
+    parents: {
+        name: "保護者向け (For Parents)",
+        patterns: [
+            { id: "A", name: "【誠実・ネイビー】", colors: ["#FFFFFF", "#0D47A1", "#212121"], desc: "白背景に濃紺と黒" },
+            { id: "B", name: "【温もりブラウン】", colors: ["#FFFFFF", "#3E2723", "#5D4037"], desc: "白背景に濃く落ち着いた茶色" },
+            { id: "C", name: "【安心・グリーン】", colors: ["#FFFFFF", "#1B5E20", "#212121"], desc: "白背景に濃緑と黒" },
+            { id: "D", name: "【エレガント紫】", colors: ["#FFFFFF", "#4A148C", "#212121"], desc: "白背景に濃紫と黒" },
+            { id: "E", name: "【明るいオレンジ】", colors: ["#FFFFFF", "#E65100", "#212121"], desc: "白背景に濃オレンジと黒" },
+            { id: "F", name: "【フレッシュ空色】", colors: ["#F0F8FF", "#01579B", "#212121"], desc: "淡青背景に濃青と黒" },
+            { id: "G", name: "【和風・えんじ】", colors: ["#FFFFFF", "#880E4F", "#212121"], desc: "白背景に濃い赤紫と黒" },
+            { id: "H", name: "【親しみイエロー】", colors: ["#FFFDE7", "#212121", "#F57F17"], desc: "淡黄背景に黒と濃黄" },
+            { id: "I", name: "【ソフトダーク】", colors: ["#37474F", "#FFFFFF", "#81D4FA"], desc: "濃灰背景に白と淡青" },
+            { id: "J", name: "【ナチュラル】", colors: ["#F5F5DC", "#212121", "#3E2723"], desc: "ベージュに黒と濃茶" },
+            { id: "K", name: "【クリアモノクロ】", colors: ["#FFFFFF", "#000000", "#616161"], desc: "白背景に黒と濃灰" },
+            { id: "L", name: "【フォーマル黒】", colors: ["#FAFAFA", "#212121", "#0D47A1"], desc: "白背景に黒と濃紺" }
+        ]
+    },
+    universal: {
+        name: "ユニバーサル (Universal)",
+        patterns: [
+            { id: "A", name: "【UD白背景・青黒】", colors: ["#FFFFFF", "#000000", "#005AFF"], desc: "最大視認性（白地に黒・青）" },
+            { id: "B", name: "【UD黒背景・黄白】", colors: ["#000000", "#FFFFFF", "#FFD600"], desc: "目への負担減（黒地に白・黄）" },
+            { id: "C", name: "【UD白背景・朱黒】", colors: ["#FFFFFF", "#000000", "#FF5722"], desc: "色覚バリアフリー（白地に黒・朱）" },
+            { id: "D", name: "【UD黒背景・緑白】", colors: ["#000000", "#FFFFFF", "#00E676"], desc: "黒背景に白と明るい緑" },
+            { id: "E", name: "【CUD推奨・青黄】", colors: ["#005AFF", "#FFD600", "#FFFFFF"], desc: "CUD推奨配色（青背景に黄・白）" },
+            { id: "F", name: "【CUD推奨・赤黒】", colors: ["#FFFFFF", "#000000", "#D32027"], desc: "白背景に黒とくっきりした赤" },
+            { id: "G", name: "【グレースケール】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "色情報に依存しない完全白黒灰" },
+            { id: "H", name: "【ローコン白配慮】", colors: ["#FAFAFA", "#212121", "#424242"], desc: "光過敏配慮のコントラスト軽減(白)" },
+            { id: "I", name: "【ローコン黒配慮】", colors: ["#212121", "#E0E0E0", "#BDBDBD"], desc: "光過敏配慮のコントラスト軽減(黒)" },
+            { id: "J", name: "【セピア・低ブルー】", colors: ["#F4ECD8", "#3E2723", "#5D4037"], desc: "ブルーライトを抑えた配色" },
+            { id: "K", name: "【HCイエロー】", colors: ["#000000", "#FFFF00", "#FFFFFF"], desc: "ロービジョン向け超高コントラスト" },
+            { id: "L", name: "【HCシアン】", colors: ["#000000", "#00FFFF", "#FFFFFF"], desc: "ロービジョン向け超高コントラスト" }
+        ]
+    }
+};
+
+// --- State Management ---
+let state = {
             theme: "",
             targetKey: "",
             patternId: "",
