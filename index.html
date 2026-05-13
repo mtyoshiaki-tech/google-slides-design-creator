@@ -1,676 +1,580 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
- <meta charset="UTF-8">
- <meta name="robots" content="noindex"> 
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Googleスライドほぼ完全クリエイター</title>
- <script src="https://cdn.tailwindcss.com"></script>
- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
- <style>
- @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
- 
- body {
- font-family: 'Noto Sans JP', sans-serif;
- background-color: #111827; /* Dark Mode Bg */
- color: #f3f4f6;
- }
- /* Custom Scrollbar */
- .custom-scrollbar::-webkit-scrollbar {
- width: 8px;
- }
- .custom-scrollbar::-webkit-scrollbar-track {
- background: #1f2937; 
- }
- .custom-scrollbar::-webkit-scrollbar-thumb {
- background: #4b5563; 
- border-radius: 4px;
- }
- .custom-scrollbar::-webkit-scrollbar-thumb:hover {
- background: #6b7280; 
- }
- .code-block {
- font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
- background-color: #000000;
- color: #4ade80; /* Matrix green text */
- padding: 1.5rem;
- border-radius: 0.5rem;
- overflow-x: auto;
- white-space: pre-wrap;
- font-size: 0.875rem;
- line-height: 1.5;
- border: 1px solid #374151;
- }
- .step-active {
- background-color: #3b82f6;
- border-color: #3b82f6;
- color: white;
- }
- 
- .step-inactive {
- background-color: #374151;
- border-color: #4b5563;
- color: #9ca3af;
- }
- .animate-fade-in {
- animation: fadeIn 0.5s ease-out;
- }
- @keyframes fadeIn {
- from { opacity: 0; transform: translateY(10px); }
- to { opacity: 1; transform: translateY(0); }
- }
- /* Input autofill fix for dark mode */
- input:-webkit-autofill,
- input:-webkit-autofill:hover, 
- input:-webkit-autofill:focus, 
- input:-webkit-autofill:active{
- -webkit-box-shadow: 0 0 0 30px #374151 inset !important;
- -webkit-text-fill-color: white !important;
- }
- </style>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Googleスライド設計クリエイター</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #111827; /* Dark Mode Bg */
+            color: #f3f4f6;
+        }
+
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1f2937; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; 
+        }
+
+        .code-block {
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            background-color: #000000;
+            color: #4ade80; /* Matrix green text */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            white-space: pre;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border: 1px solid #374151;
+        }
+
+        .step-active {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        
+        .step-inactive {
+            background-color: #374151;
+            border-color: #4b5563;
+            color: #9ca3af;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Input autofill fix for dark mode */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #374151 inset !important;
+            -webkit-text-fill-color: white !important;
+        }
+    </style>
 </head>
 <body class="min-h-screen flex flex-col">
- <!-- Header -->
- <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
- <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
- <div class="flex items-center gap-3">
- <div class="bg-blue-600 text-white p-2 rounded-lg shadow-blue-500/50 shadow-md">
- <i class="fas fa-pen-ruler text-xl"></i>
- </div>
- <div>
- <h1 class="text-xl font-bold text-gray-100">Googleスライドほぼ完全クリエイター</h1>
- <p class="text-xs text-gray-400">Geminiでスライドを自動生成するための指示書作成ツール</p>
- </div>
- </div>
- <div class="text-sm font-medium text-blue-400" id="phase-indicator">
- 要件定義
- </div>
- </div>
- </header>
- <!-- Main Content -->
- <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-8">
- 
- <!-- Progress Steps -->
- <div class="flex justify-between mb-10 relative px-2 md:px-10">
- <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-700 -z-10 transform -translate-y-1/2"></div>
- 
- <div id="step-0" class="flex flex-col items-center bg-gray-800 px-2 md:px-4 rounded-full z-10">
- <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-active transition-colors shadow-lg">1</div>
- <span class="text-xs mt-2 font-bold text-blue-400 whitespace-nowrap">要件定義</span>
- </div>
- 
- <div id="step-1" class="flex flex-col items-center bg-gray-800 px-2 md:px-4 rounded-full z-10">
- <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-inactive transition-colors shadow-lg">2</div>
- <span class="text-xs mt-2 font-bold text-gray-500 whitespace-nowrap">骨子作成</span>
- </div>
- <div id="step-2" class="flex flex-col items-center bg-gray-800 px-2 md:px-4 rounded-full z-10">
- <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-inactive transition-colors shadow-lg">3</div>
- <span class="text-xs mt-2 font-bold text-gray-500 whitespace-nowrap">詳細構成</span>
- </div>
- <div id="step-output" class="flex flex-col items-center bg-gray-800 px-2 md:px-4 rounded-full z-10">
- <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-inactive transition-colors shadow-lg">4</div>
- <span class="text-xs mt-2 font-bold text-gray-500 whitespace-nowrap">指示書生成</span>
- </div>
- </div>
- <!-- PHASE 0: Input Form -->
- <section id="phase-0" class="bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 animate-fade-in border border-gray-700">
- <h2 class="text-2xl font-bold text-gray-100 mb-6 border-b border-gray-700 pb-4 flex items-center">
- <i class="fas fa-sliders-h text-blue-500 mr-3"></i>作りたいスライドを教えてください
- </h2>
- 
- <!-- 1. Theme -->
- <div class="mb-10">
- <div class="flex items-baseline gap-2 mb-2">
- <label class="block text-sm font-bold text-gray-300">① テーマ</label>
- <span class="text-xs text-gray-400">※ざっくりした内容でも細かいスライド構成を入れてもOK</span>
- </div>
- <textarea id="input-theme" placeholder="例1:修学旅行の説明、光合成の仕組み、進路選択について&#10;例2:スライド1:タイトル・・・ ~ スライド10:まとめ" 
- class="w-full p-4 h-32 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-lg shadow-inner resize-y"></textarea>
- </div>
- <!-- 2. Target Audience -->
- <div class="mb-10">
- <label class="block text-sm font-bold text-gray-300 mb-4">② 対象</label>
- <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
- <button onclick="selectTarget('elementary')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="elementary">
- <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">🎒</span>
- <span class="text-sm font-bold text-gray-200">小学部</span>
- </button>
- <button onclick="selectTarget('middle')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="middle">
- <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">🏫</span>
- <span class="text-sm font-bold text-gray-200">中学部</span>
- </button>
- <button onclick="selectTarget('high')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="high">
- <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">🎓</span>
- <span class="text-sm font-bold text-gray-200">高等部</span>
- </button>
- <button onclick="selectTarget('teachers')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="teachers">
- <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">👩‍🏫</span>
- <span class="text-sm font-bold text-gray-200">教員向け</span>
- </button>
- <button onclick="selectTarget('parents')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="parents">
- <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">👨‍👩‍👧‍👦</span>
- <span class="text-sm font-bold text-gray-200">保護者向け</span>
- </button>
- <button onclick="selectTarget('universal')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="universal">
- <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">👁️</span>
- <span class="text-sm font-bold text-gray-200">ユニバーサル</span>
- </button>
- </div>
- </div>
- <!-- 3. Design Selection -->
- <div id="design-section" class="mb-10 hidden animate-fade-in">
- <label class="block text-sm font-bold text-gray-300 mb-4">③ デザイン - 12種類から選択</label>
- <div id="design-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"></div>
- 
- <div class="pt-6 border-t border-gray-700">
- <label class="block text-sm font-bold text-gray-300 mb-4">④ オプション</label>
- <label class="flex items-center gap-4 p-4 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer hover:bg-gray-600 transition group">
- <input type="checkbox" id="input-udfont" class="w-6 h-6 text-blue-600 rounded bg-gray-800 border-gray-500 focus:ring-blue-500 focus:ring-offset-gray-800" checked>
- <div>
- <span class="block text-base font-bold text-gray-200 group-hover:text-white">UDフォントを使用する</span>
- <span class="block text-xs text-gray-400 mt-1">「BIZ UDPゴシック」を指定し、読みやすさを向上させます。</span>
- </div>
- </label>
- </div>
- </div>
- <div class="text-center pt-8">
- <button onclick="startPhase1()" id="btn-generate-proposal" disabled 
- class="bg-gray-600 text-gray-400 font-bold py-4 px-12 rounded-full shadow-lg cursor-not-allowed transition-all transform text-lg border border-gray-600 w-full md:w-auto hover:shadow-blue-900/50">
- <i class="fas fa-magic mr-2"></i>AIにスライド骨子案を作成させる
- </button>
- <p id="error-msg" class="text-red-400 text-sm mt-3 hidden bg-red-900/30 py-2 rounded border border-red-900/50 inline-block px-4">全ての項目を選択してください</p>
- </div>
- </section>
- <!-- PHASE Loading -->
- <section id="phase-loading" class="hidden animate-fade-in text-center py-20 bg-gray-800 rounded-xl shadow-xl border border-gray-700">
- <div class="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid mb-6"></div>
- <h2 id="loading-msg" class="text-2xl font-bold text-gray-100 mb-4">AIが処理しています...</h2>
- <p class="text-gray-400">そのままお待ちください。</p>
- </section>
- <!-- PHASE 1: 骨子案確認 -->
- <section id="phase-1" class="hidden animate-fade-in bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 border border-gray-700">
- <h2 class="text-2xl font-bold text-gray-100 mb-4 flex items-center gap-3">
- <i class="fas fa-list-ol text-blue-500"></i>
- フェーズ1:スライド骨子案
- </h2>
- <textarea id="textarea-phase1" class="w-full p-4 h-96 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm shadow-inner resize-y custom-scrollbar mb-4"></textarea>
- 
- <div class="mb-6 p-4 bg-gray-700 border border-gray-600 rounded-lg">
- <label class="block text-sm font-bold text-gray-200 mb-3"><i class="fas fa-heading text-blue-400 mr-2"></i>タイトルの決定</label>
- <div class="flex flex-wrap gap-2 mb-3">
- <button onclick="selectTitleOption(1, this)" class="title-btn bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">案1</button>
- <button onclick="selectTitleOption(2, this)" class="title-btn bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">案2</button>
- <button onclick="selectTitleOption(3, this)" class="title-btn bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">案3</button>
- </div>
- <input type="text" id="custom-title-input" oninput="selectCustomTitle()" placeholder="自由にタイトルを入力することもできます" class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 outline-none">
- </div>
- <div class="flex gap-2 mb-8">
- <input type="text" id="input-revise-phase1" placeholder="AIに修正を指示する(例:〇〇を追加して)" class="flex-grow p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none">
- <button onclick="revisePhase1()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg transition whitespace-nowrap">作り直す</button>
- </div>
- <div class="mt-4 flex flex-col md:flex-row gap-4 justify-between items-center">
- <button onclick="resetApp()" class="px-6 py-3 text-gray-400 hover:text-white transition">やり直す</button>
- <button onclick="startPhase2()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition transform hover:scale-105">詳細構成を作成する</button>
- </div>
- </section>
- <!-- PHASE 2: 詳細構成案確認 -->
- <section id="phase-2-form" class="hidden animate-fade-in bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 border border-gray-700">
- <h2 class="text-2xl font-bold text-gray-100 mb-4 flex items-center gap-3">
- <i class="fas fa-file-alt text-blue-500"></i>
- フェーズ2:詳細構成案
- </h2>
- <textarea id="textarea-phase2" class="w-full p-4 h-96 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm shadow-inner resize-y custom-scrollbar mb-4"></textarea>
- 
- <div class="mb-6 p-4 bg-gray-700 border border-gray-600 rounded-lg">
- <label class="block text-sm font-bold text-gray-200 mb-3"><i class="fas fa-user-graduate text-blue-400 mr-2"></i>文章の表現を一括変更</label>
- <div class="flex flex-wrap gap-2">
- <button onclick="selectExpression('大人向け', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">大人向け</button>
- <button onclick="selectExpression('高校生向け', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">高校生向け</button>
- <button onclick="selectExpression('中学生向け', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">中学生向け</button>
- <button onclick="selectExpression('小学生向け', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">小学生向け</button>
- <button onclick="selectExpression('幼児向け', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">幼児向け</button>
- </div>
- </div>
- <div class="mb-6 p-4 bg-gray-700 border border-gray-600 rounded-lg">
- <label class="block text-sm font-bold text-gray-200 mb-3"><i class="fas fa-language text-blue-400 mr-2"></i>漢字のレベルを一括変更</label>
- <div class="flex flex-wrap gap-2">
- <button onclick="selectKanjiLevel('一般', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">一般</button>
- <button onclick="selectKanjiLevel('中学生', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">中学生</button>
- <button onclick="selectKanjiLevel('小学生高学年', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">小学生高学年</button>
- <button onclick="selectKanjiLevel('小学生低学年', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">小学生低学年</button>
- <button onclick="selectKanjiLevel('ひらがなのみ', this)" class="bg-gray-800 border border-gray-500 px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-600 transition shadow-sm text-sm">ひらがなのみ</button>
- </div>
- </div>
- <div class="flex gap-2 mb-8">
- <input type="text" id="input-revise-phase2" placeholder="追加の修正指示(例:トーンをもっと優しく)" class="flex-grow p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none">
- <button onclick="revisePhase2()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition whitespace-nowrap">修正</button>
- </div>
- <div class="mt-4 flex flex-col md:flex-row gap-4 justify-between items-center">
- <button onclick="resetApp()" class="px-6 py-3 text-gray-400 hover:text-white transition">やり直す</button>
- <button onclick="startPhase3()" class="bg-green-600 hover:bg-green-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition transform hover:scale-105">最終指示書を生成する</button>
- </div>
- </section>
- <!-- PHASE 3: Final Output (AI Instruction) -->
- <section id="phase-3" class="hidden animate-fade-in">
- <div class="bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 border border-gray-700">
- <div class="flex items-center justify-between mb-4">
- <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-3">
- <div class="bg-green-500/20 p-2 rounded-lg">
- <i class="fas fa-check text-green-500"></i>
- </div>
- フェーズ3:AI指示書の生成完了
- </h2>
- </div>
- 
- <p class="text-gray-400 mb-6 text-sm leading-relaxed">
- 教育コンサルタントAIが、スライドを自動生成するための最終的な「AI指示書」を作成しました。
- </p>
- <!-- Actions Toolbar -->
- <div class="flex flex-wrap items-center justify-end gap-4 mb-4">
- <button onclick="copyToClipboard()" class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-base px-6 py-3 rounded-lg shadow-xl transition flex items-center gap-2 font-bold transform hover:scale-105 border border-white/20">
- <i class="fas fa-copy"></i> 指示書をコピー
- </button>
- <a href="https://gemini.google.com/gem/1erGcVFMNe72ShVXbtUjsQfzj_1y5bXgL?usp=sharing" target="_blank" rel="noopener noreferrer" 
- class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white text-base px-6 py-3 rounded-lg shadow-xl transition flex items-center gap-2 font-bold no-underline transform hover:scale-105 border border-white/20 text-center">
- <i class="fas fa-sparkles"></i> 新しいチャットを開いて、Googleスライド生成モードを開く
- </a>
- </div>
- <div class="relative group">
- <pre id="final-code" class="code-block h-96 overflow-y-auto custom-scrollbar shadow-inner"></pre>
- </div>
- <div class="mt-10 flex flex-wrap gap-4 justify-center">
- <button onclick="resetApp()" class="px-8 py-3 text-blue-400 font-bold hover:bg-blue-900/30 hover:text-blue-300 rounded-lg transition border border-transparent hover:border-blue-900">
- <i class="fas fa-redo mr-2"></i>最初からやり直す
- </button>
- </div>
- </div>
- </section>
- </main>
- <footer class="bg-gray-800 border-t border-gray-700 mt-auto py-8">
- <div class="max-w-5xl mx-auto px-4 text-center text-gray-500 text-xs">
- <p class="mb-2 font-bold text-gray-400">EduSlide Architect</p>
- <p>&copy; 2025 Education Slide Architect / Based on GEM Custom Instructions</p>
- </div>
- </footer>
- <script>
- // --- Data Definitions ---
- const commonPatterns = [
- { id: "A", name: "【黒背景・黄】", colors: ["#000000", "#FFFFFF", "#FFD600"], desc: "視認性の高い黒背景に白文字と黄色" },
- { id: "B", name: "【黒背景・水色】", colors: ["#000000", "#FFFFFF", "#00FFFF"], desc: "視認性の高い黒背景に白文字と水色" },
- { id: "C", name: "【黒背景・明緑】", colors: ["#000000", "#FFFFFF", "#00E676"], desc: "視認性の高い黒背景に白文字と明緑" },
- { id: "D", name: "【白背景・青】", colors: ["#FFFFFF", "#000000", "#005AFF"], desc: "基本の白背景に黒文字と青" },
- { id: "E", name: "【白背景・赤】", colors: ["#FFFFFF", "#000000", "#D32027"], desc: "基本の白背景に黒文字と赤" },
- { id: "F", name: "【白背景・深緑】", colors: ["#FFFFFF", "#000000", "#1B5E20"], desc: "基本の白背景に黒文字と深緑" },
- { id: "G", name: "【クリーム・濃茶】", colors: ["#FFFDE7", "#3E2723", "#E65100"], desc: "目に優しいクリーム色背景に濃茶文字" },
- { id: "H", name: "【アイボリー・黒】", colors: ["#FEFBEA", "#212121", "#0D47A1"], desc: "温かみのあるアイボリー背景に黒文字" },
- { id: "I", name: "【ベージュ・黒】", colors: ["#F5F5DC", "#212121", "#1B5E20"], desc: "落ち着いたベージュ背景に黒文字" },
- { id: "J", name: "【淡青・濃青】", colors: ["#E3F2FD", "#000000", "#01579B"], desc: "さわやかな淡い青色背景に黒文字" },
- { id: "K", name: "【淡緑・濃緑】", colors: ["#E8F5E9", "#000000", "#1B5E20"], desc: "安心感のある淡い緑色背景に黒文字" },
- { id: "L", name: "【淡紫・濃紫】", colors: ["#F3E5F5", "#000000", "#4A148C"], desc: "落ち着いた淡い紫色背景に黒文字" }
- ];
- const designMatrix = {
- elementary: { name: "小学部向け (Elementary)", patterns: commonPatterns },
- middle: { name: "中学部向け (Middle School)", patterns: commonPatterns },
- high: { name: "高等部向け (High School)", patterns: commonPatterns },
- teachers: { name: "教員向け (For Teachers)", patterns: commonPatterns },
- parents: { name: "保護者向け (For Parents)", patterns: commonPatterns },
- universal: { name: "ユニバーサル (Universal)", patterns: commonPatterns }
- };
- let state = {
- theme: "",
- targetKey: "",
- patternId: "",
- udFont: true 
- };
- let selectedExpression = "";
- let selectedKanjiLevel = "";
- let chatHistory = []; 
- const els = {
- inputTheme: document.getElementById('input-theme'),
- inputUdFont: document.getElementById('input-udfont'),
- designSection: document.getElementById('design-section'),
- designContainer: document.getElementById('design-container'),
- btnGenerate: document.getElementById('btn-generate-proposal'),
- errorMsg: document.getElementById('error-msg'),
- phaseIndicator: document.getElementById('phase-indicator'),
- step0: document.getElementById('step-0'),
- step1: document.getElementById('step-1'),
- step2: document.getElementById('step-2'),
- stepOutput: document.getElementById('step-output'),
- phase0: document.getElementById('phase-0'),
- phaseLoading: document.getElementById('phase-loading'),
- loadingMsg: document.getElementById('loading-msg'),
- phase1: document.getElementById('phase-1'),
- textareaPhase1: document.getElementById('textarea-phase1'),
- inputRevisePhase1: document.getElementById('input-revise-phase1'),
- phase2form: document.getElementById('phase-2-form'),
- textareaPhase2: document.getElementById('textarea-phase2'),
- inputRevisePhase2: document.getElementById('input-revise-phase2'),
- phase3: document.getElementById('phase-3'),
- finalCode: document.getElementById('final-code')
- };
- els.inputTheme.addEventListener('input', (e) => {
- state.theme = e.target.value;
- checkValidity();
- });
- els.inputUdFont.addEventListener('change', (e) => {
- state.udFont = e.target.checked;
- });
- function checkValidity() {
- if (state.theme && state.targetKey && state.patternId) {
- els.btnGenerate.disabled = false;
- els.btnGenerate.classList.remove('bg-gray-600', 'cursor-not-allowed', 'text-gray-400', 'border-gray-600');
- els.btnGenerate.classList.add('bg-blue-600', 'hover:bg-blue-500', 'cursor-pointer', 'text-white', 'border-blue-600', 'shadow-blue-900/50');
- els.errorMsg.classList.add('hidden');
- } else {
- els.btnGenerate.disabled = true;
- els.btnGenerate.classList.add('bg-gray-600', 'cursor-not-allowed', 'text-gray-400', 'border-gray-600');
- els.btnGenerate.classList.remove('bg-blue-600', 'hover:bg-blue-500', 'cursor-pointer', 'text-white', 'border-blue-600', 'shadow-blue-900/50');
- }
- }
- function selectTarget(key) {
- state.targetKey = key;
- state.patternId = ""; 
- document.querySelectorAll('.target-btn').forEach(btn => {
- if(btn.dataset.val === key) {
- btn.classList.add('bg-blue-900', 'border-blue-500', 'ring-2', 'ring-blue-500', 'ring-offset-2', 'ring-offset-gray-800');
- btn.classList.remove('bg-gray-700', 'border-gray-600');
- } else {
- btn.classList.remove('bg-blue-900', 'border-blue-500', 'ring-2', 'ring-blue-500', 'ring-offset-2', 'ring-offset-gray-800');
- btn.classList.add('bg-gray-700', 'border-gray-600');
- }
- });
- renderPatterns(key);
- els.designSection.classList.remove('hidden');
- checkValidity();
- }
- function renderPatterns(targetKey) {
- const data = designMatrix[targetKey];
- els.designContainer.innerHTML = '';
- data.patterns.forEach(p => {
- const btn = document.createElement('button');
- btn.className = 'design-btn relative flex flex-col items-start p-4 border rounded-xl hover:shadow-lg transition w-full text-left bg-gray-700 border-gray-600';
- btn.onclick = () => selectPattern(p.id, btn);
- const colorDots = p.colors.map(c => `<span class="w-6 h-6 rounded-full border border-gray-600 shadow-sm" style="background-color: ${c};"></span>`).join('');
- btn.innerHTML = `
- <div class="flex gap-2 mb-3">${colorDots}</div>
- <div class="font-bold text-gray-200 text-sm mb-1 line-clamp-1">${p.name}</div>
- <div class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded border border-gray-600 w-full truncate">${p.desc}</div>
- `;
- els.designContainer.appendChild(btn);
- });
- }
- function selectPattern(id, btnElement) {
- state.patternId = id;
- document.querySelectorAll('.design-btn').forEach(b => {
- b.classList.remove('ring-2', 'ring-blue-500', 'border-blue-500', 'bg-blue-900', 'ring-offset-2', 'ring-offset-gray-800');
- b.classList.add('bg-gray-700', 'border-gray-600');
- });
- btnElement.classList.remove('bg-gray-700', 'border-gray-600');
- btnElement.classList.add('ring-2', 'ring-blue-500', 'border-blue-500', 'bg-blue-900', 'ring-offset-2', 'ring-offset-gray-800');
- checkValidity();
- }
- let selectedTitleInstruction = "";
- function selectTitleOption(num, btnElement) {
- document.querySelectorAll('.title-btn').forEach(btn => {
- btn.classList.remove('bg-blue-600', 'border-blue-500', 'text-white');
- btn.classList.add('bg-gray-800', 'border-gray-500', 'text-gray-300');
- });
- btnElement.classList.remove('bg-gray-800', 'border-gray-500', 'text-gray-300');
- btnElement.classList.add('bg-blue-600', 'border-blue-500', 'text-white');
- 
- document.getElementById('custom-title-input').value = "";
- selectedTitleInstruction = `タイトルは「案${num}」に決定します。`;
- }
- function selectCustomTitle() {
- document.querySelectorAll('.title-btn').forEach(btn => {
- btn.classList.remove('bg-blue-600', 'border-blue-500', 'text-white');
- btn.classList.add('bg-gray-800', 'border-gray-500', 'text-gray-300');
- });
- const val = document.getElementById('custom-title-input').value;
- if(val.trim() !== "") {
- selectedTitleInstruction = `タイトルは「${val}」に決定します。`;
- } else {
- selectedTitleInstruction = "";
- }
- }
- function updateStepper(stepIdx) {
- const steps = [els.step0, els.step1, els.step2, els.stepOutput];
- const labels = ["要件定義", "骨子作成", "詳細構成", "指示書生成"];
- steps.forEach((stepEl, idx) => {
- const div = stepEl.querySelector('div');
- const span = stepEl.querySelector('span');
- if (idx === stepIdx) {
- div.className = 'w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-active transition-colors shadow-lg';
- span.className = 'text-xs mt-2 font-bold text-blue-400 whitespace-nowrap';
- } else if (idx < stepIdx) {
- div.className = 'w-10 h-10 rounded-full border-2 border-blue-500 bg-gray-700 text-blue-500 flex items-center justify-center font-bold transition-colors';
- span.className = 'text-xs mt-2 font-bold text-gray-400 whitespace-nowrap';
- } else {
- div.className = 'w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-inactive transition-colors shadow-lg';
- span.className = 'text-xs mt-2 font-bold text-gray-500 whitespace-nowrap';
- }
- });
- els.phaseIndicator.textContent = labels[stepIdx];
- }
- function hideAllPhases() {
- els.phase0.classList.add('hidden');
- els.phase1.classList.add('hidden');
- els.phase2form.classList.add('hidden');
- els.phase3.classList.add('hidden');
- els.phaseLoading.classList.add('hidden');
- }
- const apiKey = "";
- 
- const systemPrompt = `あなたは、学校現場に特化したプロフェッショナルな「教育プレゼンテーション・コンサルタント」です。
-# 究極の目的
-ユーザーの要件に基づき、高品質なスライド構成案を完成させること。
-1. 構想策定 (フェーズ1)
-2. 詳細設計 (フェーズ2)
-3. スライド生成指示書の作成 (フェーズ3)
-# 行動プロセス
-フェーズごとに一時停止し、ユーザーの承認を待ってください。
-## ■ フェーズ 1: 骨子案の提示
-視認性チェック、タイトル3案、章立て、各スライドのレイアウト案を出力。
-## ■ フェーズ 2: 詳細な構成案の作成
-承認された骨子に基づき、原稿データの詳細を出力。(発表者ノートは不要ですので出力しないでください)
-## ■ フェーズ 3: スライド生成用プロンプトの作成
-承認された詳細構成に基づき、別のAI(スライド生成特化型GEM)に渡すための「最終的なスライド作成指示書(プロンプト)」を出力してください。
-この出力は、必ず一つのコードブロック形式で記述してください。
-共通ルール:配色厳守、用語統一(アジェンダ禁止)、日本語完全限定、発表者ノートは不要。`;
- async function callGemini(userMessage) {
- const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
- chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
- const payload = {
- contents: chatHistory,
- systemInstruction: { parts: [{ text: systemPrompt }] }
- };
- let delay = 1000;
- for (let i = 0; i < 5; i++) {
- try {
- const response = await fetch(url, {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify(payload)
- });
- if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
- const result = await response.json();
- const aiResponse = result.candidates?.[0]?.content?.parts?.[0]?.text || "エラー:応答がありませんでした。";
- chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
- return aiResponse;
- } catch (e) {
- if (i === 4) throw e;
- await new Promise(r => setTimeout(r, delay));
- delay *= 2;
- }
- }
- }
- function formatCode(text) {
- let formatted = text.replace(new RegExp('`{3}(?:javascript|gas|markdown|text)?\\n', 'ig'), '');
- formatted = formatted.replace(new RegExp('`{3}', 'g'), '');
- return formatted.trim();
- }
- async function startPhase1() {
- if(els.btnGenerate.disabled) return;
- const targetData = designMatrix[state.targetKey];
- const patternData = targetData.patterns.find(p => p.id === state.patternId);
- let promptText = `# 入力情報 (要件定義)\n- **テーマ:** ${state.theme}\n- **対象読者:** ${targetData.name}\n- **選択されたデザイン:** ${patternData.name}\n- **カラーコード:** ${patternData.colors.join(', ')}\n`;
- hideAllPhases();
- els.loadingMsg.textContent = "AIが骨子案を作成しています...";
- els.phaseLoading.classList.remove('hidden');
- updateStepper(1);
- try {
- const response = await callGemini(promptText);
- hideAllPhases();
- els.phase1.classList.remove('hidden');
- els.textareaPhase1.value = response;
- } catch (error) { showError(error); }
- }
- async function revisePhase1() {
- const reviseInstruction = els.inputRevisePhase1.value;
- if(!reviseInstruction) return;
- const currentContent = els.textareaPhase1.value;
- const promptText = `現在の以下の内容をベースに、指示に従って修正し、再度骨子案を提示してください。\n\n【現在の内容】\n${currentContent}\n\n【指示】\n${reviseInstruction}`;
- hideAllPhases();
- els.loadingMsg.textContent = "AIが骨子案を修正しています...";
- els.phaseLoading.classList.remove('hidden');
- try {
- const response = await callGemini(promptText);
- hideAllPhases();
- els.phase1.classList.remove('hidden');
- els.textareaPhase1.value = response;
- els.inputRevisePhase1.value = ''; 
- } catch (error) { showError(error); }
- }
- async function startPhase2() {
- const currentContent = els.textareaPhase1.value;
- let promptText = `以下の骨子案で承認します。\n`;
- if (selectedTitleInstruction) {
- promptText += `【重要指示】${selectedTitleInstruction}\n\n`;
- }
- promptText += `これに基づき、詳細な構成案を作成してください。\n\n${currentContent}`;
- hideAllPhases();
- els.loadingMsg.textContent = "AIが詳細な構成案を作成しています...";
- els.phaseLoading.classList.remove('hidden');
- updateStepper(2);
- try {
- const response = await callGemini(promptText);
- hideAllPhases();
- els.phase2form.classList.remove('hidden');
- els.textareaPhase2.value = response;
- 
- selectedExpression = "";
- selectedKanjiLevel = "";
- document.querySelectorAll('#phase-2-form .bg-blue-600').forEach(btn => {
- if(!btn.classList.contains('font-bold')) { 
- btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
- btn.classList.add('bg-gray-800', 'text-gray-300', 'border-gray-500');
- }
- });
- } catch (error) { showError(error); }
- }
- function selectExpression(level, btnElement) {
- selectedExpression = selectedExpression === level ? "" : level;
- const container = btnElement.parentElement;
- container.querySelectorAll('button').forEach(btn => {
- btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
- btn.classList.add('bg-gray-800', 'text-gray-300', 'border-gray-500');
- });
- if(selectedExpression) {
- btnElement.classList.remove('bg-gray-800', 'text-gray-300', 'border-gray-500');
- btnElement.classList.add('bg-blue-600', 'text-white', 'border-blue-500');
- }
- }
- function selectKanjiLevel(level, btnElement) {
- selectedKanjiLevel = selectedKanjiLevel === level ? "" : level;
- const container = btnElement.parentElement;
- container.querySelectorAll('button').forEach(btn => {
- btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
- btn.classList.add('bg-gray-800', 'text-gray-300', 'border-gray-500');
- });
- if(selectedKanjiLevel) {
- btnElement.classList.remove('bg-gray-800', 'text-gray-300', 'border-gray-500');
- btnElement.classList.add('bg-blue-600', 'text-white', 'border-blue-500');
- }
- }
- async function revisePhase2() {
- const reviseInstruction = els.inputRevisePhase2.value.trim();
- if(!reviseInstruction && !selectedExpression && !selectedKanjiLevel) return;
- 
- const currentContent = els.textareaPhase2.value;
- let promptText = `現在の以下の内容をベースに、指示に従って修正し、再度詳細構成案を提示してください。それ以外の構成は変えないでください。\n\n`;
- 
- promptText += `【指示】\n`;
- if (selectedExpression) {
- promptText += `- 文章の表現を「${selectedExpression}」に変更してください。\n`;
- }
- if (selectedKanjiLevel) {
- promptText += `- 使用する漢字のレベルを「${selectedKanjiLevel}」に変更してください。※ただし、ふりがな(ルビ)は絶対に付けないでください。\n`;
- }
- if (reviseInstruction) {
- promptText += `- ${reviseInstruction}\n`;
- }
- 
- promptText += `\n【現在の内容】\n${currentContent}`;
- hideAllPhases();
- els.loadingMsg.textContent = "AIが詳細構成案を修正しています...";
- els.phaseLoading.classList.remove('hidden');
- try {
- const response = await callGemini(promptText);
- hideAllPhases();
- els.phase2form.classList.remove('hidden');
- els.textareaPhase2.value = response;
- els.inputRevisePhase2.value = ''; 
- } catch (error) { showError(error); }
- }
- async function startPhase3() {
- const currentContent = els.textareaPhase2.value;
- const promptText = `以下の詳細構成案で完全に承認します。
-これに基づき、別のAI(スライド生成特化型GEM)に渡すための、詳細な「AI指示書(プロンプト)」をコードブロック形式で出力してください。
-余計な解説や挨拶は一切不要です。
-\n\n${currentContent}`;
- hideAllPhases();
- els.loadingMsg.textContent = "AIが最終指示書を生成しています...";
- els.phaseLoading.classList.remove('hidden');
- updateStepper(3);
- try {
- const response = await callGemini(promptText);
- hideAllPhases();
- els.phase3.classList.remove('hidden');
- els.finalCode.textContent = formatCode(response);
- } catch (error) { showError(error); }
- }
- function showError(error) {
- hideAllPhases();
- els.phase0.classList.remove('hidden');
- updateStepper(0);
- chatHistory = [];
- console.error(error);
- }
- function resetApp() {
- chatHistory = [];
- hideAllPhases();
- els.phase0.classList.remove('hidden');
- updateStepper(0);
- window.scrollTo(0,0);
- }
- function copyToClipboard() {
- const text = els.finalCode.textContent;
- const textarea = document.createElement('textarea');
- textarea.value = text;
- textarea.style.position = 'fixed';
- textarea.style.opacity = '0';
- document.body.appendChild(textarea);
- textarea.select();
- try {
- document.execCommand('copy');
- const btn = document.querySelector('button[onclick="copyToClipboard()"]');
- const originalHtml = btn.innerHTML;
- btn.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
- setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
- } catch (err) { console.error(err); }
- document.body.removeChild(textarea);
- }
- </script>
+
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg shadow-blue-500/50 shadow-md">
+                    <!-- Icon changed to pen-ruler for "Design/Create" feel -->
+                    <i class="fas fa-pen-ruler text-xl"></i>
+                </div>
+                <div>
+                    <!-- Updated Title & Subtitle (Option A) -->
+                    <h1 class="text-xl font-bold text-gray-100">Googleスライド設計クリエイター</h1>
+                    <p class="text-xs text-gray-400">Geminiでスライドを自動生成するための指示書作成ツール</p>
+                </div>
+            </div>
+            <div class="text-sm font-medium text-blue-400" id="phase-indicator">
+                スライドの基本設定
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-8">
+        
+        <!-- Progress Steps -->
+        <div class="flex justify-between mb-10 relative px-10">
+            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-700 -z-10 transform -translate-y-1/2"></div>
+            
+            <!-- Step 1: 設定 -->
+            <div id="step-0" class="flex flex-col items-center bg-gray-800 px-4 rounded-full z-10">
+                <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-active transition-colors shadow-lg">1</div>
+                <span class="text-xs mt-2 font-bold text-blue-400">基本設定</span>
+            </div>
+            
+            <!-- Step 2: 出力 -->
+            <div id="step-output" class="flex flex-col items-center bg-gray-800 px-4 rounded-full z-10">
+                <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-inactive transition-colors shadow-lg">2</div>
+                <span class="text-xs mt-2 font-bold text-gray-500">出力</span>
+            </div>
+        </div>
+
+        <!-- PHASE 0: Input Form -->
+        <section id="phase-0" class="bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 animate-fade-in border border-gray-700">
+            <h2 class="text-2xl font-bold text-gray-100 mb-6 border-b border-gray-700 pb-4 flex items-center">
+                <i class="fas fa-sliders-h text-blue-500 mr-3"></i>作りたいスライドを教えてください
+            </h2>
+            
+            <!-- 1. Theme -->
+            <div class="mb-10">
+                <div class="flex items-baseline gap-2 mb-2">
+                    <label class="block text-sm font-bold text-gray-300">① テーマ</label>
+                    <span class="text-xs text-gray-400">※ざっくりした内容でも細かいスライド構成を入れてもOK</span>
+                </div>
+                <textarea id="input-theme" placeholder="例１：修学旅行の説明、光合成の仕組み、進路選択について&#10;例２：スライド１：タイトル・・・　～　　スライド１０：まとめ" 
+                    class="w-full p-4 h-32 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-lg shadow-inner resize-y"></textarea>
+            </div>
+
+            <!-- 2. Target Audience -->
+            <div class="mb-10">
+                <label class="block text-sm font-bold text-gray-300 mb-4">② 対象</label>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <button onclick="selectTarget('elementary')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="elementary">
+                        <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">🎒</span>
+                        <span class="text-sm font-bold text-gray-200">小学部</span>
+                    </button>
+                    <button onclick="selectTarget('middle')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="middle">
+                        <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">🏫</span>
+                        <span class="text-sm font-bold text-gray-200">中学部</span>
+                    </button>
+                    <button onclick="selectTarget('high')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="high">
+                        <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">🎓</span>
+                        <span class="text-sm font-bold text-gray-200">高等部</span>
+                    </button>
+                    <button onclick="selectTarget('teachers')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="teachers">
+                        <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">👩‍🏫</span>
+                        <span class="text-sm font-bold text-gray-200">教員向け</span>
+                    </button>
+                    <button onclick="selectTarget('parents')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="parents">
+                        <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">👨‍👩‍👧‍👦</span>
+                        <span class="text-sm font-bold text-gray-200">保護者向け</span>
+                    </button>
+                    <button onclick="selectTarget('universal')" class="target-btn p-4 bg-gray-700 border border-gray-600 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-blue-500 text-left transition group" data-val="universal">
+                        <span class="block text-2xl mb-1 group-hover:scale-110 transition-transform">👁️</span>
+                        <span class="text-sm font-bold text-gray-200">ユニバーサル</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. Design Selection (Hidden until Target is selected) -->
+            <div id="design-section" class="mb-10 hidden animate-fade-in">
+                <label class="block text-sm font-bold text-gray-300 mb-4">③ デザイン - 12種類から選択</label>
+                <div id="design-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <!-- Javascript will populate this -->
+                </div>
+                
+                <!-- 4. Option (UD Font) -->
+                <div class="pt-6 border-t border-gray-700">
+                    <label class="block text-sm font-bold text-gray-300 mb-4">④ オプション</label>
+                    <label class="flex items-center gap-4 p-4 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer hover:bg-gray-600 transition group">
+                        <!-- Checked by default -->
+                        <input type="checkbox" id="input-udfont" class="w-6 h-6 text-blue-600 rounded bg-gray-800 border-gray-500 focus:ring-blue-500 focus:ring-offset-gray-800" checked>
+                        <div>
+                            <span class="block text-base font-bold text-gray-200 group-hover:text-white">UDフォントを使用する</span>
+                            <span class="block text-xs text-gray-400 mt-1">「BIZ UDPゴシック」を指定し、読みやすさを向上させます。</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Action -->
+            <div class="text-center pt-8">
+                <button onclick="generateAndGoToOutput()" id="btn-generate-proposal" disabled 
+                    class="bg-gray-600 text-gray-400 font-bold py-4 px-12 rounded-full shadow-lg cursor-not-allowed transition-all transform text-lg border border-gray-600 w-full md:w-auto hover:shadow-blue-900/50">
+                    <i class="fas fa-magic mr-2"></i>プロンプトを生成する
+                </button>
+                <p id="error-msg" class="text-red-400 text-sm mt-3 hidden bg-red-900/30 py-2 rounded border border-red-900/50 inline-block px-4">全ての項目（テーマ・対象・デザイン）を選択してください</p>
+            </div>
+        </section>
+
+
+        <!-- PHASE 2: Final Output -->
+        <section id="phase-2" class="hidden animate-fade-in">
+            <div class="bg-gray-800 rounded-xl shadow-xl p-6 md:p-8 border border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-3">
+                        <div class="bg-green-500/20 p-2 rounded-lg">
+                            <i class="fas fa-check text-green-500"></i>
+                        </div>
+                        AI指示書（プロンプト）の生成完了
+                    </h2>
+                    <button onclick="backToPhase0()" class="text-sm text-gray-400 hover:text-blue-400 underline transition">
+                        要件を修正する
+                    </button>
+                </div>
+                
+                <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                    以下のコードブロックは、GEM（AI）に対する<strong>「スライド作成指示書（プロンプト）」</strong>です。<br>
+                    これをコピーしてGEMに渡すと、AIが指示内容を完全に理解し、最適なGoogleスライド生成スクリプトを作成します。
+                </p>
+
+                <!-- Actions Toolbar -->
+                <div class="flex flex-wrap items-center justify-end gap-4 mb-4">
+                    <button onclick="copyToClipboard()" class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-base px-8 py-3 rounded-lg shadow-xl transition flex items-center gap-2 font-extrabold transform hover:scale-105 border border-white/20">
+                        <i class="fas fa-copy"></i> ①コードをコピー
+                    </button>
+                    <a href="https://gemini.google.com/gem/1IyiaDM91R8aOpYBN3-Svgprwd5bC37uQ?usp=sharing" target="_blank" rel="noopener noreferrer" 
+                       class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white text-base px-8 py-3 rounded-lg shadow-xl transition flex items-center gap-2 font-extrabold no-underline transform hover:scale-105 border border-white/20">
+                        <i class="fas fa-sparkles"></i> ②NEW Chat
+                    </a>
+                </div>
+
+                <div class="relative group">
+                    <pre id="final-code" class="code-block h-96 overflow-y-auto custom-scrollbar shadow-inner"></pre>
+                </div>
+
+                <div class="mt-10 text-center">
+            <button onclick="location.reload()" class="px-8 py-3 text-blue-400 font-bold hover:bg-blue-900/30 hover:text-blue-300 rounded-lg transition border border-transparent hover:border-blue-900">
+                <i class="fas fa-redo mr-2"></i>新しいテーマで作成する
+            </button>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="bg-gray-800 border-t border-gray-700 mt-auto py-8">
+<div class="max-w-5xl mx-auto px-4 text-center text-gray-500 text-xs">
+    <p class="mb-2 font-bold text-gray-400">EduSlide Architect</p>
+    <p>&copy; 2025 Education Slide Architect / Based on GEM Custom Instructions</p>
+</div>
+</footer>
+
+<!-- JavaScript Application Logic -->
+<script>
+// --- Data Definitions (Target x Design Matrix: Expanded to 12 - High Visibility Version) ---
+const designMatrix = {
+    elementary: {
+        name: "小学部向け (Elementary)",
+        patterns: [
+            { id: "A", name: "【元気・ポップ】", colors: ["#FFFFFF", "#0277BD", "#E65100"], desc: "白背景に濃い青とオレンジ" },
+            { id: "B", name: "【青空・太陽】", colors: ["#E1F5FE", "#01579B", "#D32F2F"], desc: "淡青背景にくっきり赤青" },
+            { id: "C", name: "【森の探検】", colors: ["#F1F8E9", "#1B5E20", "#4E342E"], desc: "淡緑背景に濃緑と濃茶" },
+            { id: "D", name: "【くっきり・絵本】", colors: ["#FFFFFF", "#212121", "#D50000"], desc: "白背景に黒文字と鮮烈な赤" },
+            { id: "E", name: "【星空・宇宙】", colors: ["#1A237E", "#FFFFFF", "#FFD600"], desc: "濃紺背景に白文字と黄色" },
+            { id: "F", name: "【ストロベリー】", colors: ["#FFFFFF", "#C2185B", "#1B5E20"], desc: "白背景に濃ピンクと濃緑" },
+            { id: "G", name: "【海・マリン】", colors: ["#FFFFFF", "#0D47A1", "#0288D1"], desc: "白背景に2種の濃い青" },
+            { id: "H", name: "【ヒマワリ】", colors: ["#FFFDE7", "#212121", "#F57F17"], desc: "淡黄背景に黒と濃いオレンジ" },
+            { id: "I", name: "【アクティブ】", colors: ["#FFFFFF", "#212121", "#E65100"], desc: "白背景に黒と目立つオレンジ" },
+            { id: "J", name: "【サファリ】", colors: ["#EFEBE9", "#3E2723", "#1B5E20"], desc: "淡茶背景に濃茶と濃緑" },
+            { id: "K", name: "【レインボー】", colors: ["#FFFFFF", "#0D47A1", "#B71C1C"], desc: "白背景に濃い青と濃い赤" },
+            { id: "L", name: "【黒板・チョーク】", colors: ["#263238", "#FFFFFF", "#FFEB3B"], desc: "黒板色に白と黄色の文字" }
+        ]
+    },
+    middle: {
+        name: "中学部向け (Middle School)",
+        patterns: [
+            { id: "A", name: "【学校・黒板】", colors: ["#1B5E20", "#FFFFFF", "#FFEB3B"], desc: "緑の黒板に白と黄色の文字" },
+            { id: "B", name: "【スマートノート】", colors: ["#FFFFFF", "#1A237E", "#D32F2F"], desc: "白背景に濃紺と濃赤" },
+            { id: "C", name: "【部活・エナジー】", colors: ["#FFFFFF", "#E65100", "#212121"], desc: "白背景に濃オレンジと黒" },
+            { id: "D", name: "【テック・ダーク】", colors: ["#212121", "#FFFFFF", "#00E676"], desc: "黒背景に白とネオングリーン" },
+            { id: "E", name: "【クリア・ブルー】", colors: ["#E3F2FD", "#0D47A1", "#1565C0"], desc: "淡青背景に高コントラスト青" },
+            { id: "F", name: "【モノクロシャープ】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "白黒灰で視認性最大" },
+            { id: "G", name: "【サイエンス】", colors: ["#FFFFFF", "#006064", "#00BCD4"], desc: "白背景に濃い青緑" },
+            { id: "H", name: "【ヒストリー】", colors: ["#FFF8E1", "#3E2723", "#5D4037"], desc: "淡黄背景に濃い茶色" },
+            { id: "I", name: "【ネイビーイエロー】", colors: ["#0D47A1", "#FFFFFF", "#FFD600"], desc: "濃紺背景に白と黄色" },
+            { id: "J", name: "【アーバン・シティ】", colors: ["#ECEFF1", "#263238", "#455A64"], desc: "薄灰背景に濃灰文字" },
+            { id: "K", name: "【フレッシュ緑】", colors: ["#FFFFFF", "#1B5E20", "#4CAF50"], desc: "白背景に濃緑と鮮やかな緑" },
+            { id: "L", name: "【ディープパープル】", colors: ["#311B92", "#FFFFFF", "#EA80FC"], desc: "濃紫背景に白と明るい紫" }
+        ]
+    },
+    high: {
+        name: "高等部向け (High School)",
+        patterns: [
+            { id: "A", name: "【アカデミック】", colors: ["#FFFFFF", "#0D47A1", "#1A237E"], desc: "白背景に濃い青と紺" },
+            { id: "B", name: "【クラシック黒】", colors: ["#FFFFFF", "#212121", "#000000"], desc: "白背景に真っ黒な文字" },
+            { id: "C", name: "【モダン・ダーク】", colors: ["#121212", "#FFFFFF", "#90CAF9"], desc: "漆黒に白文字と淡い青" },
+            { id: "D", name: "【クリムゾン赤】", colors: ["#FFFFFF", "#B71C1C", "#212121"], desc: "白背景にえんじ色と黒" },
+            { id: "E", name: "【ミニマル・白】", colors: ["#FAFAFA", "#424242", "#1976D2"], desc: "真っ白な背景に濃灰と青" },
+            { id: "F", name: "【エコ・グリーン】", colors: ["#FFFFFF", "#004D40", "#00695C"], desc: "白背景に濃い青緑" },
+            { id: "G", name: "【フューチャー】", colors: ["#000000", "#FFFFFF", "#00B0FF"], desc: "黒背景に白と明るいシアン" },
+            { id: "H", name: "【トラディショナル】", colors: ["#FFFFFF", "#3E2723", "#5D4037"], desc: "白背景に濃い茶色" },
+            { id: "I", name: "【アナリティクス】", colors: ["#FFFFFF", "#311B92", "#6200EA"], desc: "白背景に濃い紫と青紫" },
+            { id: "J", name: "【ハイコン黄黒】", colors: ["#000000", "#FFD600", "#FFFFFF"], desc: "黒背景に黄色と白の文字" },
+            { id: "K", name: "【エレガント紺】", colors: ["#F5F5F5", "#1A237E", "#B71C1C"], desc: "淡灰に濃紺とえんじ色" },
+            { id: "L", name: "【グローバル】", colors: ["#FFFFFF", "#01579B", "#33691E"], desc: "白背景に濃い青と濃い緑" }
+        ]
+    },
+    teachers: {
+        name: "教員向け (For Teachers)",
+        patterns: [
+            { id: "A", name: "【スタンダード】", colors: ["#FFFFFF", "#212121", "#0277BD"], desc: "白背景に黒と公式な青" },
+            { id: "B", name: "【プリント用白黒】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "白黒印刷に最適な高コントラスト" },
+            { id: "C", name: "【トラスト・紺】", colors: ["#FFFFFF", "#0D47A1", "#1565C0"], desc: "白背景に信頼感のある濃紺" },
+            { id: "D", name: "【ワークショップ】", colors: ["#FFFFFF", "#E65100", "#212121"], desc: "白背景に目立つオレンジと黒" },
+            { id: "E", name: "【研修グリーン】", colors: ["#FFFFFF", "#1B5E20", "#2E7D32"], desc: "白背景に落ち着いた濃緑" },
+            { id: "F", name: "【フォーカス暗】", colors: ["#263238", "#FFFFFF", "#4FC3F7"], desc: "濃灰背景に白と水色" },
+            { id: "G", name: "【ロジカルブルー】", colors: ["#F3F6F9", "#003366", "#CC0000"], desc: "ごく淡い青に濃紺と濃赤" },
+            { id: "H", name: "【温もりブラウン】", colors: ["#FFFFFF", "#4E342E", "#3E2723"], desc: "白背景に落ち着いた濃茶" },
+            { id: "I", name: "【クリアホワイト】", colors: ["#FFFFFF", "#333333", "#005AFF"], desc: "白背景に濃灰と鮮明な青" },
+            { id: "J", name: "【データレポート】", colors: ["#FFFFFF", "#4A148C", "#212121"], desc: "白背景に濃紫と黒" },
+            { id: "K", name: "【シンプルセピア】", colors: ["#FEFBEA", "#212121", "#5D4037"], desc: "淡アイボリーに黒と濃茶" },
+            { id: "L", name: "【ハイコン黄色】", colors: ["#212121", "#FFFFFF", "#FFD600"], desc: "濃灰背景に白と黄色" }
+        ]
+    },
+    parents: {
+        name: "保護者向け (For Parents)",
+        patterns: [
+            { id: "A", name: "【誠実・ネイビー】", colors: ["#FFFFFF", "#0D47A1", "#212121"], desc: "白背景に濃紺と黒" },
+            { id: "B", name: "【温もりブラウン】", colors: ["#FFFFFF", "#3E2723", "#5D4037"], desc: "白背景に濃く落ち着いた茶色" },
+            { id: "C", name: "【安心・グリーン】", colors: ["#FFFFFF", "#1B5E20", "#212121"], desc: "白背景に濃緑と黒" },
+            { id: "D", name: "【エレガント紫】", colors: ["#FFFFFF", "#4A148C", "#212121"], desc: "白背景に濃紫と黒" },
+            { id: "E", name: "【明るいオレンジ】", colors: ["#FFFFFF", "#E65100", "#212121"], desc: "白背景に濃オレンジと黒" },
+            { id: "F", name: "【フレッシュ空色】", colors: ["#F0F8FF", "#01579B", "#212121"], desc: "淡青背景に濃青と黒" },
+            { id: "G", name: "【和風・えんじ】", colors: ["#FFFFFF", "#880E4F", "#212121"], desc: "白背景に濃い赤紫と黒" },
+            { id: "H", name: "【親しみイエロー】", colors: ["#FFFDE7", "#212121", "#F57F17"], desc: "淡黄背景に黒と濃黄" },
+            { id: "I", name: "【ソフトダーク】", colors: ["#37474F", "#FFFFFF", "#81D4FA"], desc: "濃灰背景に白と淡青" },
+            { id: "J", name: "【ナチュラル】", colors: ["#F5F5DC", "#212121", "#3E2723"], desc: "ベージュに黒と濃茶" },
+            { id: "K", name: "【クリアモノクロ】", colors: ["#FFFFFF", "#000000", "#616161"], desc: "白背景に黒と濃灰" },
+            { id: "L", name: "【フォーマル黒】", colors: ["#FAFAFA", "#212121", "#0D47A1"], desc: "白背景に黒と濃紺" }
+        ]
+    },
+    universal: {
+        name: "ユニバーサル (Universal)",
+        patterns: [
+            { id: "A", name: "【UD白背景・青黒】", colors: ["#FFFFFF", "#000000", "#005AFF"], desc: "最大視認性（白地に黒・青）" },
+            { id: "B", name: "【UD黒背景・黄白】", colors: ["#000000", "#FFFFFF", "#FFD600"], desc: "目への負担減（黒地に白・黄）" },
+            { id: "C", name: "【UD白背景・朱黒】", colors: ["#FFFFFF", "#000000", "#FF5722"], desc: "色覚バリアフリー（白地に黒・朱）" },
+            { id: "D", name: "【UD黒背景・緑白】", colors: ["#000000", "#FFFFFF", "#00E676"], desc: "黒背景に白と明るい緑" },
+            { id: "E", name: "【CUD推奨・青黄】", colors: ["#005AFF", "#FFD600", "#FFFFFF"], desc: "CUD推奨配色（青背景に黄・白）" },
+            { id: "F", name: "【CUD推奨・赤黒】", colors: ["#FFFFFF", "#000000", "#D32027"], desc: "白背景に黒とくっきりした赤" },
+            { id: "G", name: "【グレースケール】", colors: ["#FFFFFF", "#000000", "#757575"], desc: "色情報に依存しない完全白黒灰" },
+            { id: "H", name: "【ローコン白配慮】", colors: ["#FAFAFA", "#212121", "#424242"], desc: "光過敏配慮のコントラスト軽減(白)" },
+            { id: "I", name: "【ローコン黒配慮】", colors: ["#212121", "#E0E0E0", "#BDBDBD"], desc: "光過敏配慮のコントラスト軽減(黒)" },
+            { id: "J", name: "【セピア・低ブルー】", colors: ["#F4ECD8", "#3E2723", "#5D4037"], desc: "ブルーライトを抑えた配色" },
+            { id: "K", name: "【HCイエロー】", colors: ["#000000", "#FFFF00", "#FFFFFF"], desc: "ロービジョン向け超高コントラスト" },
+            { id: "L", name: "【HCシアン】", colors: ["#000000", "#00FFFF", "#FFFFFF"], desc: "ロービジョン向け超高コントラスト" }
+        ]
+    }
+};
+
+// --- State Management ---
+let state = {
+            theme: "",
+            targetKey: "",
+            patternId: "",
+            udFont: true // Default true
+        };
+
+        // --- DOM Elements ---
+        const els = {
+            inputTheme: document.getElementById('input-theme'),
+            inputUdFont: document.getElementById('input-udfont'),
+            designSection: document.getElementById('design-section'),
+            designContainer: document.getElementById('design-container'),
+            btnGenerate: document.getElementById('btn-generate-proposal'),
+            errorMsg: document.getElementById('error-msg'),
+            phaseIndicator: document.getElementById('phase-indicator'),
+            // Steps
+            step0: document.getElementById('step-0'),
+            stepOutput: document.getElementById('step-output'),
+            // Phases
+            phase0: document.getElementById('phase-0'),
+            phase2: document.getElementById('phase-2'),
+            // Final Output
+            finalCode: document.getElementById('final-code')
+        };
+
+        // --- Event Listeners ---
+        els.inputTheme.addEventListener('input', (e) => {
+            state.theme = e.target.value;
+            checkValidity();
+        });
+
+        els.inputUdFont.addEventListener('change', (e) => {
+            state.udFont = e.target.checked;
+        });
+
+        function checkValidity() {
+            if (state.theme && state.targetKey && state.patternId) {
+                els.btnGenerate.disabled = false;
+                els.btnGenerate.classList.remove('bg-gray-600', 'cursor-not-allowed', 'text-gray-400', 'border-gray-600');
+                els.btnGenerate.classList.add('bg-blue-600', 'hover:bg-blue-500', 'cursor-pointer', 'text-white', 'border-blue-600', 'shadow-blue-900/50');
+                els.errorMsg.classList.add('hidden');
+            } else {
+                els.btnGenerate.disabled = true;
+                els.btnGenerate.classList.add('bg-gray-600', 'cursor-not-allowed', 'text-gray-400', 'border-gray-600');
+                els.btnGenerate.classList.remove('bg-blue-600', 'hover:bg-blue-500', 'cursor-pointer', 'text-white', 'border-blue-600', 'shadow-blue-900/50');
+            }
+        }
+
+        function selectTarget(key) {
+            state.targetKey = key;
+            state.patternId = ""; // Reset pattern when target changes
+            
+            // UI Update for Target Buttons
+            document.querySelectorAll('.target-btn').forEach(btn => {
+                if(btn.dataset.val === key) {
+                    btn.classList.add('bg-blue-900', 'border-blue-500', 'ring-2', 'ring-blue-500', 'ring-offset-2', 'ring-offset-gray-800');
+                    btn.classList.remove('bg-gray-700', 'border-gray-600');
+                } else {
+                    btn.classList.remove('bg-blue-900', 'border-blue-500', 'ring-2', 'ring-blue-500', 'ring-offset-2', 'ring-offset-gray-800');
+                    btn.classList.add('bg-gray-700', 'border-gray-600');
+                }
+            });
+
+            renderPatterns(key);
+            els.designSection.classList.remove('hidden');
+            checkValidity();
+        }
+
+        function renderPatterns(targetKey) {
+            const data = designMatrix[targetKey];
+            els.designContainer.innerHTML = '';
+
+            data.patterns.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'design-btn relative flex flex-col items-start p-4 border rounded-xl hover:shadow-lg transition w-full text-left bg-gray-700 border-gray-600';
+                btn.onclick = () => selectPattern(p.id, btn);
+                
+                // Color Preview Circles
+                const colorDots = p.colors.map(c => 
+                    `<span class="w-6 h-6 rounded-full border border-gray-600 shadow-sm" style="background-color: ${c};"></span>`
+                ).join('');
+
+                btn.innerHTML = `
+                    <div class="flex gap-2 mb-3">${colorDots}</div>
+                    <div class="font-bold text-gray-200 text-sm mb-1 line-clamp-1">${p.name}</div>
+                    <div class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded border border-gray-600 w-full truncate">${p.desc}</div>
+                `;
+                els.designContainer.appendChild(btn);
+            });
+        }
+
+        function selectPattern(id, btnElement) {
+            state.patternId = id;
+            
+            // UI reset
+            document.querySelectorAll('.design-btn').forEach(b => {
+                b.classList.remove('ring-2', 'ring-blue-500', 'border-blue-500', 'bg-blue-900', 'ring-offset-2', 'ring-offset-gray-800');
+                b.classList.add('bg-gray-700', 'border-gray-600');
+            });
+            // Active state
+            btnElement.classList.remove('bg-gray-700', 'border-gray-600');
+            btnElement.classList.add('ring-2', 'ring-blue-500', 'border-blue-500', 'bg-blue-900', 'ring-offset-2', 'ring-offset-gray-800');
+            
+            checkValidity();
+        }
+
+        // --- Flow Control ---
+
+        function updateStepper(isOutputPhase) {
+            // Step 1: Settings
+            const div0 = els.step0.querySelector('div');
+            const span0 = els.step0.querySelector('span');
+            div0.className = 'w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold step-active transition-colors shadow-lg';
+            span0.className = 'text-xs mt-2 font-bold text-blue-400';
+
+            // Step 2: Output
+            const divOut = els.stepOutput.querySelector('div');
+            const spanOut = els.stepOutput.querySelector('span');
+            
+            if(isOutputPhase) {
+                divOut.classList.remove('step-inactive');
+                divOut.classList.add('step-active');
+                spanOut.className = 'text-xs mt-2 font-bold text-blue-400';
+            } else {
+                divOut.classList.add('step-inactive');
+                divOut.classList.remove('step-active');
+                spanOut.className = 'text-xs mt-2 font-bold text-gray-500';
+            }
+        }
+
+        function generateAndGoToOutput() {
+            if(els.btnGenerate.disabled) return;
+
+            generatePromptScript();
+
+            els.phase0.classList.add('hidden');
+            els.phase2.classList.remove('hidden');
+            els.phaseIndicator.textContent = "出力";
+            updateStepper(true);
+            window.scrollTo(0,0);
+        }
+
+        function backToPhase0() {
+            els.phase2.classList.add('hidden');
+            els.phase0.classList.remove('hidden');
+            els.phaseIndicator.textContent = "スライドの基本設定";
+            updateStepper(false);
+        }
+
+        // --- Prompt Generation Logic ---
+
+        function generatePromptScript() {
+            const targetData = designMatrix[state.targetKey];
+            const patternData = targetData.patterns.find(p => p.id === state.patternId);
+            
+            // AIへの指示書（プロンプト）を作成
+            // 余計なコンテキストを削除し、純粋な要件定義のみを出力する
+            let script = ``;
+            
+            script += `# 入力情報 (要件定義)\n`;
+            script += `- **テーマ:** ${state.theme}\n`;
+            script += `- **対象読者:** ${targetData.name}\n`;
+            script += `- **選択されたデザイン:** ${patternData.name} - ${patternData.desc}\n`;
+            script += `- **カラーコード (HEX):** ${patternData.colors.join(', ')}\n`;
+            if (state.udFont) {
+                script += `- **UDフォント:** 使用する (BIZ UDPゴシック)\n`;
+            } else {
+                script += `- **UDフォント:** 指定なし\n`;
+            }
+            script += `\n`;
+
+            script += `# デザイン/コンテンツ要件\n`;
+            script += `1. **言葉遣いとトーン:** ${targetData.name}に合わせて最適化してください。\n`;
+            script += `   (例: 小学生なら平易な言葉と「です・ます」、教員なら公式文書的なトーン)\n`;
+            script += `2. **配色:** 指定されたカラーコード (${patternData.colors.join(', ')}) を必ず使用し、スライドの背景色、テキスト色、アクセントカラーに適用してください。\n`;
+            
+            if (state.udFont) {
+                script += `3. **フォント:** ユニバーサルデザインに配慮し、必ず **「BIZ UDPゴシック」** ("BIZ UDPGothic") を指定してください。`;
+            } else {
+                script += `3. **フォント:** 日本語フォント（"Sawarabi Mincho", "M PLUS 1p" 等）を明示的に指定し、文字化けを防いでください。`;
+            }
+
+            els.finalCode.textContent = script;
+        }
+
+        function copyToClipboard() {
+            const text = els.finalCode.textContent;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                const btn = document.querySelector('button[onclick="copyToClipboard()"]');
+                const originalHtml = btn.innerHTML;
+                const originalClasses = btn.className;
+
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                // Switch to success gradient
+                btn.className = "bg-gradient-to-r from-green-500 to-emerald-600 text-white text-base px-8 py-3 rounded-lg shadow-xl transition flex items-center gap-2 font-extrabold transform scale-105 border border-white/20";
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.className = originalClasses;
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+    </script>
 </body>
 </html>
